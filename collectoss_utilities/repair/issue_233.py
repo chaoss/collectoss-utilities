@@ -25,6 +25,8 @@ from collectoss.application.db.models import Repo
 
 from ._cli_util import get_db_version
 
+from pygit2 import Repository
+
 from dotenv import load_dotenv
 
 load_dotenv()
