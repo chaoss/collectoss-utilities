@@ -4,9 +4,14 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = [
-    "collectoss",
-]
+dependencies = ["collectoss"]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [tool.uv.sources]
 collectoss = { git = "https://github.com/chaoss/CollectOSS", rev = "b19a4fbff0523d49e397a164020f934ab2c868ad" }
+
+[project.scripts]
+collectoss-utilities = "collectoss_utilities.cli.main:run"
