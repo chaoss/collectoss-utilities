@@ -23,7 +23,6 @@ from pathlib import Path
 # from collectoss.application.db.session import DatabaseSession
 from datetime import datetime
 
-from collectoss.application.cli._cli_util import get_db_version
 
 from pygit2 import Repository, GitError
 
