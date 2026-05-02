@@ -23,6 +23,7 @@ from pathlib import Path
 # from collectoss.application.db.session import DatabaseSession
 from datetime import datetime
 
+from ..repair import RepairToolMetadata
 
 from pygit2 import Repository, GitError
 
@@ -81,8 +82,8 @@ def command(ctx, dry_run, output_dir, facade_dir):
     contributor commits to their github profiles.
     """
 
-    tool_source = "CollectOSS Selftest Repair"
-    tool_version = "0.1"
+    tool_source = RepairToolMetadata().name + " for issue #233"
+    tool_version = RepairToolMetadata().version
 
     output_dir = Path(output_dir)
     if not output_dir.exists():

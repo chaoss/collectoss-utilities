@@ -1,6 +1,14 @@
 import click
 import importlib
 import pkgutil
+from collectoss_utilities.utils import ToolMetadata
+
+class RepairToolMetadata(ToolMetadata):
+
+    @property
+    def name(self) -> str:
+        return super().name + " Repair Module"
+
 
 @click.group()
 def repair():
