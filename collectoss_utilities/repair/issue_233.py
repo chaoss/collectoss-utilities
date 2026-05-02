@@ -5,11 +5,11 @@ import sqlalchemy as s
 import csv
 import os
 from sqlalchemy import select, func
-from augur.application.db.lib import get_repo_by_repo_id
-from augur.application.db.session import DatabaseSession
+from collectoss.application.db.lib import get_repo_by_repo_id
+from collectoss.application.db.session import DatabaseSession
 
-from augur.application.config import AugurConfig
-from augur.tasks.git.util.facade_worker.facade_worker.utilitymethods import get_absolute_repo_path
+from collectoss.application.config import SystemConfig
+from collectoss.tasks.git.util.facade_worker.facade_worker.utilitymethods import get_absolute_repo_path
 
 from collectoss.application.cli import (
     test_connection,
@@ -17,7 +17,7 @@ from collectoss.application.cli import (
     with_database,
     DatabaseContext,
 )
-from augur.application.db.models.augur_data import Commit
+from collectoss.application.db.models.augur_data import Commit
 from pathlib import Path
 
 # from collectoss.application.db.session import DatabaseSession
@@ -102,7 +102,7 @@ def append_log_file(file:Path, values):
 @click.pass_context
 def run_selftest_repair(ctx, dry_run, output_dir, facade_dir):
 
-    tool_source = "Augur Selftest Repair"
+    tool_source = "CollectOSS Selftest Repair"
     tool_version = "0.1"
 
     output_dir = Path(output_dir)
@@ -113,11 +113,11 @@ def run_selftest_repair(ctx, dry_run, output_dir, facade_dir):
     
     click.echo("Checking for missing commit author names (#3740)...")
 
-    # This checker for missing commit author names is a necessary fixup for https://github.com/chaoss/augur/issues/3740
+    # This checker for missing commit author names is a necessary fixup for https://github.com/chaoss/CollectOSS/issues/233
     # it is written as a series of queries to read data esssentially field-by-field to narrow the results down because
-    # the commits table actually stores commit files (https://github.com/chaoss/augur/issues/3682)
+    # the commits table actually stores commit files (https://github.com/chaoss/CollectOSS/issues/211)
     # the structure of this tool is also intended to output a list of confirmed affected records first,
-    # so that detailed records can be kept by the augur admin if desired.
+    # so that detailed records can be kept by the CollectOSS admin if desired.
 
 
     # affected_commits_file = output_dir.joinpath("3740_affected_commit_hashes.csv")
@@ -129,12 +129,12 @@ def run_selftest_repair(ctx, dry_run, output_dir, facade_dir):
     if repo_base_directory is None:
 
         with DatabaseSession(logger, ctx.obj.engine) as session:
-            config = AugurConfig(logger, session)
+            config = SystemConfig(logger, session)
             
             repo_base_directory = config.get_value("Facade", "repo_directory")
 
     if repo_base_directory is None:
-        raise ValueError("Augur should have a facade repo base directory set in the config. It is unsafe to continue without one")
+        raise ValueError("CollectOSS should have a facade repo base directory set in the config. It is unsafe to continue without one")
 
     if not repo_base_directory.endswith("/"):
         repo_base_directory += "/"
