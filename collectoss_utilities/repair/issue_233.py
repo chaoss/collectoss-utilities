@@ -23,7 +23,7 @@ from pathlib import Path
 # from collectoss.application.db.session import DatabaseSession
 from datetime import datetime
 
-from ._cli_util import get_db_version
+from collectoss.application.cli._cli_util import get_db_version
 
 from pygit2 import Repository, GitError
 
@@ -36,35 +36,6 @@ logger = logging.getLogger(__name__)
 
 
 ENVVAR_PREFIX = "AUGUR_"
-
-
-@click.group("selftest", short_help="CollectOSS self-testing utilities")
-@click.pass_context
-def cli(ctx):
-    ctx.obj = DatabaseContext()
-
-
-@cli.command("report")
-@test_connection
-@test_db_connection
-@with_database
-@click.pass_context
-def run_selftest_report(ctx):
-    """
-    Run queries to evaluate various aspects of the augur system's functioning and produce a report
-    """
-    click.echo('Generating Augur selftest report....')
-
-    cmt_author_name_issue_3740_query = (
-        select(func.count())
-        .select_from(Commit)
-        .where(Commit.cmt_author_name == '')
-    )
-    cmt_author_name_issue_3740_count = None
-
-    with ctx.obj.engine.begin() as connection:
-        cmt_author_name_issue_3740_count = connection.execute(cmt_author_name_issue_3740_query).scalar_one()
-        click.echo(f'Issue 3740 count: {cmt_author_name_issue_3740_count} commit files in the `commits` table contain authors with an empty string as their name')
 
 
 def append_log_file(file:Path, values):
@@ -92,7 +63,9 @@ def append_log_file(file:Path, values):
             f.writelines([str(r)+'\n' for r in values])
 
 
-@cli.command("repair")
+
+# This file contains a click command for fixing https://github.com/chaoss/CollectOSS/issues/233
+@click.command(name="233")
 @click.option("--dry-run", is_flag=True, default=False, help="Skip the final updating of values to demonstrate what work would be done without doing it")
 @click.option("--output-dir", default=".", help="A path to the directory where output files should be written")
 @click.option("--facade-dir", default=None, help="The path to the directory where facade git clones are stored", envvar=ENVVAR_PREFIX + 'FACADE_REPO_DIRECTORY')
@@ -100,7 +73,14 @@ def append_log_file(file:Path, values):
 @test_db_connection
 @with_database
 @click.pass_context
-def run_selftest_repair(ctx, dry_run, output_dir, facade_dir):
+def command(ctx, dry_run, output_dir, facade_dir):
+    """Fixes issue #233:
+    This was a bug where, due to a string parsing error, empty strings were being parsed as
+    commit author names, regardless of the actual commit author name.
+    This, combined with several other bugs (such as name-based lookups), resulted in
+    data corruption, particularly in the section of the CollectOSS database that resolves
+    contributor commits to their github profiles.
+    """
 
     tool_source = "CollectOSS Selftest Repair"
     tool_version = "0.1"
@@ -114,11 +94,9 @@ def run_selftest_repair(ctx, dry_run, output_dir, facade_dir):
     click.echo("Checking for missing commit author names (#3740)...")
 
     # This checker for missing commit author names is a necessary fixup for https://github.com/chaoss/CollectOSS/issues/233
-    # it is written as a series of queries to read data esssentially field-by-field to narrow the results down because
-    # the commits table actually stores commit files (https://github.com/chaoss/CollectOSS/issues/211)
-    # the structure of this tool is also intended to output a list of confirmed affected records first,
-    # so that detailed records can be kept by the CollectOSS admin if desired.
-
+    # it is written as a series of queries to read data in a series of queries that narrow down,
+    # esssentially field-by-field because the commits table actually stores commit files
+    # (see https://github.com/chaoss/CollectOSS/issues/211).
 
     # affected_commits_file = output_dir.joinpath("3740_affected_commit_hashes.csv")
     # affected_repos_file = output_dir.joinpath("3740_affected_repos.csv")
