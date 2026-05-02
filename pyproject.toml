@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = ["collectoss"]
+dependencies = ["collectoss", "pygit2>=1.19.2"]
 
 [build-system]
 requires = ["setuptools", "wheel"]
