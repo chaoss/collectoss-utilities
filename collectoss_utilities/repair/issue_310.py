@@ -10,9 +10,10 @@ from collectoss.application.cli import (
     with_database,
     DatabaseContext,
 )
-from ..repair import RepairToolMetadata
+from collectoss.application.db.models.augur_data import Repo
 
 from pygit2 import Repository, GitError
+from ..repair import RepairToolMetadata
 
 from dotenv import load_dotenv
 
@@ -40,14 +41,33 @@ def command(ctx, dry_run):
     
     click.echo("Checking for missing commit author names (#310)...")
 
-    # with DatabaseSession(logger, ctx.obj.engine) as session:
+    with DatabaseSession(logger, ctx.obj.engine) as session:
 
-    #     click.echo("\tcounting total affected rows...", nl=False)
+        click.echo("\tcounting total affected rows...", nl=False)
 
-    #     total_count_query = s.select(func.count()).where(Commit.cmt_author_name == '')
-    #     total_count = session.execute(total_count_query).scalar_one()
+        all_repos = s.select(Repo)
 
-    #     click.echo(f"found {total_count} rows.")
+        click.echo(f"found {len(all_repos)} repos.")
+
+
+        affected_repos = []
+
+        unaffected_repos = []
+
+
+        for r in all_repos:
+            if r.repo_name not in r.repo_git:
+                affected_repos.append(r)
+            else:
+                unaffected_repos.append(r)
+
+
+        click.echo(f"found {len(affected_repos)} affected repos.")
+
+        click.echo(f"found {len(unaffected_repos)} unaffected repos.")
+
+
+
 
     #     click.echo(f"\tFetching the affected repos...")
 
