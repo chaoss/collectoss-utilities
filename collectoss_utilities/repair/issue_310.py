@@ -45,7 +45,7 @@ def command(ctx, dry_run):
 
         click.echo("\tcounting total affected rows...", nl=False)
 
-        all_repos = s.select(Repo)
+        all_repos = session.execute(s.select(Repo)).scalars().all()
 
         click.echo(f"found {len(all_repos)} repos.")
 
