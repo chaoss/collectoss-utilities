@@ -56,7 +56,8 @@ def command(ctx, dry_run):
 
 
         for r in all_repos:
-            if r.repo_name not in r.repo_git:
+            # cases: 1. name is changed, 2. name is shortened
+            if r.repo_name not in r.repo_git or not r.repo_git.endswith(r.repo_name):
                 affected_repos.append(r)
             else:
                 unaffected_repos.append(r)
