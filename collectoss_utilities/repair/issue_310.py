@@ -41,7 +41,7 @@ def command(ctx, dry_run):
     tool_source = RepairToolMetadata().name + " for issue #310"
     tool_version = RepairToolMetadata().version
     
-    click.echo("Checking for missing commit author names (#310)...")
+    click.echo("Checking for mismatching repo_name values in the repo table (#310)...")
 
     with DatabaseSession(logger, ctx.obj.engine) as session:
 
