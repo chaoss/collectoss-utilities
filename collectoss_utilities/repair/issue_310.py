@@ -72,6 +72,19 @@ def command(ctx, dry_run):
 
         click.echo(f"found {len(unaffected_repos)} unaffected repos.")
 
+        for a in affected_repos:
+            current_owner, current_name = get_owner_repo(a.repo_git)
+            action = "needs rename" if dry_run else "being renamed"
+            click.echo(f"repo named {a.repo_name} (id: {a.repo_id}) {action} to {current_name}")
+            if not dry_run:
+                a.repo_name = current_name
+
+
+        if dry_run:
+            click.echo(f"No changes made because script was run in dry-run mode.")
+        else:
+            session.commit()
+            click.echo(f"Done.")
 
 
 
