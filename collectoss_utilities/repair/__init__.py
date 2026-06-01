@@ -2,7 +2,7 @@ import click
 import importlib
 import pkgutil
 from collectoss_utilities.utils import ToolMetadata
-
+from collectoss.application.cli import DatabaseContext
 class RepairToolMetadata(ToolMetadata):
 
     @property
@@ -11,9 +11,11 @@ class RepairToolMetadata(ToolMetadata):
 
 
 @click.group()
-def repair():
+@click.pass_context
+def repair(ctx):
     """Run repair scripts for specific issues."""
-    pass
+    ctx.obj = DatabaseContext()
+
 
 # Auto-discover and register all issue_*.py modules in this package
 package_path = __path__
