@@ -11,6 +11,8 @@ from collectoss.application.cli import (
     DatabaseContext,
 )
 from collectoss.application.db.models.augur_data import Repo
+from collectoss.tasks.github.util.util import get_owner_repo
+
 
 from pygit2 import Repository, GitError
 from ..repair import RepairToolMetadata
