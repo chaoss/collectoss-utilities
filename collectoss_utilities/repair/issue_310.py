@@ -61,6 +61,7 @@ def command(ctx, dry_run):
             # cases: 1. name is changed, 2. name is shortened
             if not r.repo_name:
                 click.echo(f"found repo with no name {r.repo_git} {r.repo_id}. Likely disabled, skipping.")
+                unaffected_repos.append(r)
                 continue
             if r.repo_name not in r.repo_git or not r.repo_git.endswith(r.repo_name):
                 affected_repos.append(r)
