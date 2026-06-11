@@ -1,3 +1,9 @@
+// Usage: 
+// 1. Copy everything below this comment
+// 2. paste into https://caiorss.github.io/bookmarklet-maker/
+// 3. copy the contents of the "output" box
+// 4. create a new bookmark in your browser, named whatever you want, and paste that output in the url box
+// to use: view a task page in flower and click your bookmark to open a new issue on the target repo
 (function () {
     // Helper to find text within table rows or definition lists dynamically
     function getVal(labels) {
