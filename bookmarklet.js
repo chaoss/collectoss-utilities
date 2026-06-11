@@ -4,6 +4,8 @@
 // 3. copy the contents of the "output" box
 // 4. create a new bookmark in your browser, named whatever you want, and paste that output in the url box
 // to use: view a task page in flower and click your bookmark to open a new issue on the target repo
+// in many cases the contents will be too big to be transmitted in the URL.
+// To avoid this, the bookmarklet will also copy the full text to the clipboard for pasting places
 (function () {
     // Helper to find text within table rows or definition lists dynamically
     function getVal(labels) {
