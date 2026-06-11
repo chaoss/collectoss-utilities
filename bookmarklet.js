@@ -60,6 +60,7 @@
 
     // Formulate the full Markdown payload for clipboard copy
     var fullMarkdown = [
+
         "### Task Details",
         "- **Task Name:** `" + (name || 'N/A') + "`",
         "- **Task ID:** `" + (uuid || 'N/A') + "`",
@@ -71,10 +72,14 @@
         exception || 'No exception message found.',
         "```",
         "",
-        "### Traceback",
+        "<details>",
+        "<summary>Stack Trace</summary>",
+        "",
         "```python",
         traceback || 'No traceback found.',
-        "```"
+        "```",
+        "",
+        "</details>"
     ].join('\n');
 
     // Copy to clipboard execution
@@ -102,15 +107,18 @@
         "- **Arguments:** `" + (args || 'N/A') + "`",
         "- **Keyword Args:** `" + (kwargs || 'N/A') + "`",
         "",
-        "### Exception",
         "```",
         exception || 'No exception message found.',
         "```",
         "",
-        "### Traceback",
+        "<details>",
+        "<summary>Stack Trace</summary>",
+        "",
         "```python",
         urlTraceback,
         "```",
+        "",
+        "</details>",
         limitNote
     ].join('\n');
 
