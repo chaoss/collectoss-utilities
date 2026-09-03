@@ -1,5 +1,6 @@
 import click
 from collectoss_utilities.deletes import command as delete_command
+from collectoss_utilities.check import command as check_command
 from collectoss_utilities.repair import repair
 
 @click.group()
@@ -9,3 +10,4 @@ def cli():
 
 cli.add_command(repair)
 cli.add_command(delete_command)
+cli.add_command(check_command)
