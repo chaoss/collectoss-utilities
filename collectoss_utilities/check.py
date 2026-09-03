@@ -138,6 +138,9 @@ def command(urls, url_file, output_path):
             "Provide at least one URL as an argument or via --file / -f."
         )
 
+    # TODO: in future we should refactor and reuse the function that CollectOSS uses to normalize urls (and maybe make it part of libaspen)
+    all_urls = [u.lower() for u in all_urls]
+
     # ── Validation ───────────────────────────────────────────────────────────
     # Partition into valid/invalid; always show invalids but keep going.
     invalid_urls = [u for u in all_urls if not is_valid_github_url(u)]
