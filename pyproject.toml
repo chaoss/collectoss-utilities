@@ -11,7 +11,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.uv.sources]
-collectoss = { git = "https://github.com/chaoss/CollectOSS", rev = "b19a4fbff0523d49e397a164020f934ab2c868ad" }
+collectoss = { git = "https://github.com/chaoss/CollectOSS", rev = "339edc520e79dd1728ca19255d94a05a4a107df1" }
 
 [project.scripts]
 collectoss-utilities = "collectoss_utilities:cli"
