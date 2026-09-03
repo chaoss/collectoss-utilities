@@ -177,6 +177,14 @@ def command(urls, url_file, output_path):
             for url, repo_id in found:
                 click.echo(f"  {url}  (repo_id={repo_id})")
 
+        
+        # TODO: in future we should check missing repos for any existing redirects, then recheck the new urls (and print both)
+        # this has been started by adrian on the `stage2` branch
+
+
+        # TODO: once we have exhausted the above, we should segment missing repos by whether they exist
+        # i.e. does the URL return 200 or 404, so we can clearly say "not loaded" vs "dead link" rather than "missing"
+
         if missing:
             click.echo(click.style(f"\n=== MISSING ({len(missing)}) ===", fg="red", bold=True))
             for url in missing:
